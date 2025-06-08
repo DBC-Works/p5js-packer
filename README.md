@@ -2,15 +2,18 @@
 
 # p5js packer
 
-## Develop and build
+## Build and run
 
 1. Clone this repository
 2. Run `npm install`
 3. Run `npm run build`
 4. Run `npm run preview`
 
-- If you want to run for development, run `npm run dev`
-- If you want to run unit test, run `npm run test`
+## Develop
+
+- First, run `npx lefthook install`
+- `npm run test`(CLI) or `npm run test:ui`(GUI) to run unit tests
+- `npm run dev` to start dev server
 
 ## CHANGELOG
 
