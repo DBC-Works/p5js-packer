@@ -1,16 +1,16 @@
-import { beforeAll, describe, expect, it } from 'vitest'
+import { screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 
-import { initApp } from './main'
+import { setupComponentUnderTest } from './testUtils'
+
+import { P5JsPacker } from './main'
 
 describe('App', () => {
-  beforeAll(() => {
-    const rootElement = document.createElement('div')
-    rootElement.id = 'root'
-    document.body.appendChild(rootElement)
-    initApp()
-  })
-
   it('should display app title', () => {
-    expect(document.querySelector('#root')).toHaveTextContent('p5.js packer')
+    // arrange & act
+    setupComponentUnderTest(<P5JsPacker />)
+
+    // assert
+    expect(screen.getByRole('heading', { level: 1, name: 'p5.js packer' })).toBeInTheDocument()
   })
 })

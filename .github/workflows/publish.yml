@@ -24,7 +24,7 @@ jobs:
       BASE_PATH: /p5js-packer
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Setup Node
@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: npm run test && npm run build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           # Upload entire repository
           path: 'dist/'
