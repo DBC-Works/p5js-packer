@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest'
 
 import { setupComponentUnderTest } from './testUtils'
 
-import { App } from './main'
+import { P5JsPacker } from './main'
 
 describe('App', () => {
   it('should display app title', () => {
     // arrange & act
-    setupComponentUnderTest(<App />)
+    setupComponentUnderTest(<P5JsPacker />)
 
     // assert
     expect(screen.getByRole('heading', { level: 1, name: 'p5.js packer' })).toBeInTheDocument()

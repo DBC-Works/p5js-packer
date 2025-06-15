@@ -2,6 +2,8 @@ import { type RenderResult, render } from '@testing-library/react'
 import { type UserEvent, userEvent } from '@testing-library/user-event'
 import React from 'react'
 
+import './i18n'
+
 /**
  * Set up result type
  */

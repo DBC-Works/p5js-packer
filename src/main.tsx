@@ -1,6 +1,9 @@
 import React, { type JSX } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { Edit } from './views/pages/Edit'
+import './i18n'
+
 //
 // Components
 //
@@ -9,7 +12,7 @@ import ReactDOM from 'react-dom/client'
  * Application component
  * @returns JSX Element
  */
-export const App: React.FC = (): JSX.Element => <h1>p5.js packer</h1>
+export const P5JsPacker: React.FC = (): JSX.Element => <Edit />
 
 //
 // Entry
@@ -23,7 +26,7 @@ export const initApp = () => {
   if (rootElement) {
     ReactDOM.createRoot(rootElement).render(
       <React.StrictMode>
-        <App />
+        <P5JsPacker />
       </React.StrictMode>,
     )
   } else {
