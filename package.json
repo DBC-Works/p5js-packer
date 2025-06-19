@@ -17,6 +17,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/js-beautify": "^1.14.3",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react-swc": "^3.10.1",
@@ -24,7 +25,6 @@
     "@vitest/ui": "^3.2.2",
     "happy-dom": "^17.6.3",
     "lefthook": "^1.11.13",
-    "terser": "^5.41.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-tsconfig-paths": "^5.1.4",
@@ -36,8 +36,11 @@
     "@fontsource/roboto": "^5.2.6",
     "@mui/material": "^7.1.1",
     "i18next-browser-languagedetector": "^8.2.0",
+    "jotai": "^2.12.5",
+    "js-beautify": "^1.15.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-i18next": "^15.5.2"
+    "react-i18next": "^15.5.2",
+    "terser": "^5.42.0"
   }
 }
