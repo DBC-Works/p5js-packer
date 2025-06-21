@@ -1,7 +1,7 @@
 import { Button, Tab, Tabs, TextareaAutosize, css } from '@mui/material'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
-import { type ChangeEvent, type JSX, useCallback, useState } from 'react'
+import { type ChangeEvent, type JSX, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { minify } from 'terser'
 
@@ -10,6 +10,7 @@ import {
   getVerboseCodeAtom,
   setMinifiedAtom,
   setVerboseCodeAtom,
+  tabIndexAtom,
 } from '../../states/atoms'
 import { App } from '../templates/App'
 import { FlexColumnContainer } from '../templates/FlexColumnContainer'
@@ -30,6 +31,7 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
   const minified = useAtomValue(getMinifiedAtom)
   const setVerboseCode = useSetAtom(setVerboseCodeAtom)
   const setMinified = useSetAtom(setMinifiedAtom)
+  const setTabIndex = useSetAtom(tabIndexAtom)
   const { t } = useTranslation()
 
   const handleChangeCode = useCallback(
@@ -46,11 +48,12 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
     try {
       const { code } = await minify(verboseCode)
       setMinified(`${code}// #つぶやきProcessing`)
+      setTabIndex(1)
     } catch (error) {
       console.error(error.message)
       setMinified(error.message)
     }
-  }, [verboseCode, setMinified])
+  }, [verboseCode, setMinified, setTabIndex])
 
   return (
     <FlexColumnContainer
@@ -83,6 +86,7 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
           {t('Minify & Run')}
         </Button>
       </div>
+      <MinifiedRow />
     </FlexColumnContainer>
   )
 }
@@ -92,7 +96,7 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
  * @returns JSX Element
  */
 const CanvasTabPanel: React.FC = (): JSX.Element => {
-  const { t } = useTranslation()
+  const minified = useAtomValue(getMinifiedAtom)
 
   return (
     <FlexColumnContainer
@@ -102,10 +106,15 @@ const CanvasTabPanel: React.FC = (): JSX.Element => {
       css={css({ flexGrow: 1 })}
     >
       <FlexColumnContainer css={CSS_FLEX_GROW_1}>
-        <iframe title="canvas" css={css({ flexGrow: 1, width: 'calc(100% - 0.5rem)' })} />
-        <Button variant="outlined" disabled css={css({ width: '100%' })}>
-          {t('Stop')}
-        </Button>
+        <iframe
+          sandbox="allow-scripts"
+          title="canvas"
+          css={css({ flexGrow: 1, width: 'calc(100% - 0.5rem)', border: 'none' })}
+          srcDoc={`
+<script src="https://cdn.jsdelivr.net/npm/p5@2.0.3/lib/p5.min.js"></script>
+<script>window.devicePixelRatio=1;${minified}</script>
+`}
+        />
       </FlexColumnContainer>
     </FlexColumnContainer>
   )
@@ -152,12 +161,15 @@ const MinifiedRow: React.FC = (): JSX.Element => {
  * @returns JSX Element
  */
 export const Edit: React.FC = (): JSX.Element => {
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useAtom(tabIndexAtom)
   const { t } = useTranslation()
 
-  const handleChangeTab = useCallback((_event: React.SyntheticEvent, newValue: number) => {
-    setTabIndex(newValue)
-  }, [])
+  const handleChangeTab = useCallback(
+    (_event: React.SyntheticEvent, newValue: number) => {
+      setTabIndex(newValue)
+    },
+    [setTabIndex],
+  )
 
   return (
     <App>
@@ -176,7 +188,6 @@ export const Edit: React.FC = (): JSX.Element => {
         </Tabs>
         {tabIndex === 0 && <CodeTabPanel />}
         {tabIndex === 1 && <CanvasTabPanel />}
-        <MinifiedRow />
       </section>
     </App>
   )

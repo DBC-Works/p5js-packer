@@ -20,17 +20,6 @@ describe('"Edit" page component', () => {
   })
 
   describe('"Code" tab', () => {
-    it('should not contain "Stop" button', async () => {
-      // arrange
-      setup()
-
-      // act
-      await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-
-      // assert
-      expect(screen.queryByRole('button', { name: 'stop' })).not.toBeInTheDocument()
-    })
-
     it('should enable "Minify & Run" button when the verbose code is entered', async () => {
       // arrange
       setup()
@@ -76,6 +65,21 @@ describe('"Edit" page component', () => {
       expect(screen.getByText(`${text.length}`)).toBeInTheDocument()
     })
 
+    it('should select "Canvas" tab when "Minify & Run" button is clicked', async () => {
+      // arrange
+      setup()
+      await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
+      const textarea = screen.getByLabelText('verbose code')
+      await userEvent.clear(textarea)
+      await userEvent.type(textarea, 'const msg = "Hello, p5.js!"')
+
+      // act
+      await userEvent.click(screen.getByRole('button', { name: 'Minify & Run' }))
+
+      // assert
+      expect(screen.getByTitle('canvas')).toBeInTheDocument()
+    })
+
     it('should set minified code when "Minify & Run" button is clicked', async () => {
       // arrange
       setup()
@@ -88,6 +92,7 @@ describe('"Edit" page component', () => {
       await userEvent.click(screen.getByRole('button', { name: 'Minify & Run' }))
 
       // assert
+      await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       expect(screen.getByLabelText('minified')).toHaveTextContent(
         'const msg="Hello, p5.js!";// #つぶやきProcessing',
       )
@@ -112,19 +117,6 @@ describe('"Edit" page component', () => {
   })
 
   describe('"Canvas" tab', () => {
-    it('should contain "Stop" button', async () => {
-      // arrange & act
-      setup()
-
-      // act
-      await userEvent.click(screen.getByRole('tab', { name: 'Canvas' }))
-
-      // assert
-      const actual = screen.getByRole('button', { name: 'Stop' })
-      expect(actual).toBeInTheDocument()
-      expect(actual).toBeDisabled()
-    })
-
     it('should not contain "Beautify" button and "Minify & Run" button', async () => {
       // arrange
       setup()
