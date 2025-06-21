@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build
-        run: npm run test && npm run build
+        run: npm run test && npm run build:gh-pages
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
