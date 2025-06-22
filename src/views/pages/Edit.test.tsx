@@ -1,13 +1,23 @@
-import { screen } from '@testing-library/react'
+import { getByRole, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
+import { minifiedAtom, verboseCodeAtom } from '../../states/atoms'
 import { setupComponentWithStateProviderUnderTest } from '../../testUtils'
 import { Edit } from './Edit'
 
+vi.mock('../molecules/CodeEditor')
+
 describe('"Edit" page component', () => {
   const setup = () => {
-    setupComponentWithStateProviderUnderTest(<Edit />)
+    setupComponentWithStateProviderUnderTest(<Edit />, [
+      [verboseCodeAtom, ''],
+      [minifiedAtom, ''],
+    ])
+  }
+
+  const getReactAceInnerTextArea = (testId: string): HTMLTextAreaElement => {
+    return getByRole(screen.getByTestId(testId), 'textbox')
   }
 
   it('should contains "Code" Tab and "Canvas" Tab', () => {
@@ -24,12 +34,10 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('verbose code')
-      await userEvent.clear(textarea)
       expect(screen.getByRole('button', { name: 'Minify & Run' })).toBeDisabled()
 
       // act
-      await userEvent.type(textarea, 'console.log("Hello, p5.js!")')
+      await userEvent.type(getReactAceInnerTextArea('verbose-code'), 'console.log("Hello, p5.js!")')
 
       // assert
       expect(screen.getByRole('button', { name: 'Minify & Run' })).toBeEnabled()
@@ -39,12 +47,10 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('minified')
-      await userEvent.clear(textarea)
       expect(screen.getByRole('button', { name: 'Beautify' })).toBeDisabled()
 
       // act
-      await userEvent.type(textarea, 'console.log("Hello, p5.js!")')
+      await userEvent.type(getReactAceInnerTextArea('minified'), 'console.log("Hello, p5.js!")')
 
       // assert
       expect(screen.getByRole('button', { name: 'Beautify' })).toBeEnabled()
@@ -54,12 +60,10 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('minified')
-      await userEvent.clear(textarea)
       const text = 'console.log("Hello, p5.js!")'
 
       // act
-      await userEvent.type(textarea, text)
+      await userEvent.type(getReactAceInnerTextArea('minified'), text)
 
       // assert
       expect(screen.getByText(`${text.length}`)).toBeInTheDocument()
@@ -69,9 +73,7 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('verbose code')
-      await userEvent.clear(textarea)
-      await userEvent.type(textarea, 'const msg = "Hello, p5.js!"')
+      await userEvent.type(getReactAceInnerTextArea('verbose-code'), 'const msg = "Hello, p5.js!"')
 
       // act
       await userEvent.click(screen.getByRole('button', { name: 'Minify & Run' }))
@@ -84,16 +86,14 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('verbose code')
-      await userEvent.clear(textarea)
-      await userEvent.type(textarea, 'const msg = "Hello, p5.js!"')
+      await userEvent.type(getReactAceInnerTextArea('verbose-code'), 'const msg = "Hello, p5.js!"')
 
       // act
       await userEvent.click(screen.getByRole('button', { name: 'Minify & Run' }))
 
       // assert
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      expect(screen.getByLabelText('minified')).toHaveTextContent(
+      expect(getReactAceInnerTextArea('minified')).toHaveTextContent(
         'const msg="Hello, p5.js!";// #つぶやきProcessing',
       )
     })
@@ -102,15 +102,16 @@ describe('"Edit" page component', () => {
       // arrange
       setup()
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
-      const textarea = screen.getByLabelText('minified')
-      await userEvent.clear(textarea)
-      await userEvent.type(textarea, 'const msg="Hello, p5.js!";// #つぶやきProcessing')
+      await userEvent.type(
+        getReactAceInnerTextArea('minified'),
+        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+      )
 
       // act
       await userEvent.click(screen.getByRole('button', { name: 'Beautify' }))
 
       // assert
-      expect(screen.getByLabelText('verbose code')).toHaveTextContent(
+      expect(getReactAceInnerTextArea('verbose-code')).toHaveTextContent(
         'const msg = "Hello, p5.js!"; // #つぶやきProcessing',
       )
     })
