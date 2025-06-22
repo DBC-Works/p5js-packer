@@ -2,6 +2,8 @@
 
 # p5js packer
 
+'p5.js packer' is a simple web app that minify and run p5.js code.
+
 ## Build and run
 
 1. Clone this repository
