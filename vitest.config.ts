@@ -20,6 +20,10 @@ export default defineConfig({
         find: /.*\/GlobalStyles/,
         replacement: path.resolve(__dirname, './src/__mocks__/GlobalStyles.tsx'),
       },
+      {
+        find: /.*\/CodeEditor/,
+        replacement: path.resolve(__dirname, './src/__mocks__/CodeEditor.tsx'),
+      },
     ],
     coverage: {
       exclude: [

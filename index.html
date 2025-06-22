@@ -13,10 +13,8 @@
       content="
         require-trusted-types 'scripts';
         trusted-types 'none';
-        child-src 'self';
         navigate-to 'self';
         font-src 'self';
-        img-src 'self';
         media-src 'none';
         object-src 'none';
         manifest-src 'self';
@@ -27,8 +25,7 @@
         style-src-attr 'self';
         style-src-elem 'self' 'unsafe-inline';
         script-src-attr 'self';
-        connect-src 'self';
-        worker-src 'self';"
+        connect-src 'self';"
     />
     <script type="module" src="/src/main.tsx"></script>
     <title>p5.js packer</title>

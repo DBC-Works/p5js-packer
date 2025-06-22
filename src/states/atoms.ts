@@ -4,9 +4,9 @@ import { atomWithStorage } from 'jotai/utils'
 /**
  * Verbose code atom
  */
-const verboseCodeAtom = atomWithStorage(
+export const verboseCodeAtom = atomWithStorage(
   'verboseCode',
-  `t=0;
+  `t = 0;
 draw= _ => {
   (t || (createCanvas(W = 720, W), noFill(H = W / 2), colorMode(HSB, 1, 1, 1, 1)))
   blendMode(NORMAL);
@@ -20,7 +20,7 @@ draw= _ => {
     ellipse(0, 0, W, W * 1.618 * sin(j));
     pop();
   }
-  t+=.001;
+  t += .001;
 }`,
 )
 
@@ -44,7 +44,7 @@ export const setVerboseCodeAtom = atom(null, (_, set, code: string) => {
 /**
  * Minified atom
  */
-const minifiedAtom = atomWithStorage('minified', '')
+export const minifiedAtom = atomWithStorage('minified', '')
 
 /**
  * Get minified read-only atom

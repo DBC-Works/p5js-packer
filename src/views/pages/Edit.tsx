@@ -1,7 +1,7 @@
-import { Button, Tab, Tabs, TextareaAutosize, css } from '@mui/material'
+import { Button, Tab, Tabs, Typography, css } from '@mui/material'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
-import { type ChangeEvent, type JSX, useCallback } from 'react'
+import { type JSX, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { minify } from 'terser'
 
@@ -12,6 +12,7 @@ import {
   setVerboseCodeAtom,
   tabIndexAtom,
 } from '../../states/atoms'
+import { CodeEditor } from '../molecules/CodeEditor'
 import { App } from '../templates/App'
 import { FlexColumnContainer } from '../templates/FlexColumnContainer'
 
@@ -21,6 +22,8 @@ const ID_TAB_PANEL_CODE = 'code-tab-panel'
 const ID_TAB_PANEL_CANVAS = 'canvas-tab-panel'
 
 const CSS_FLEX_GROW_1 = css({ flexGrow: 1 })
+
+const INDENT_SIZE = 2
 
 /**
  * Code tab panel component
@@ -35,14 +38,18 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
   const { t } = useTranslation()
 
   const handleChangeCode = useCallback(
-    (e: ChangeEvent<globalThis.HTMLTextAreaElement>) => {
-      setVerboseCode(e.target?.value)
+    (value: string) => {
+      setVerboseCode(value)
     },
     [setVerboseCode],
   )
 
   const handleClickBeautify = useCallback(async () => {
-    setVerboseCode(await beautify(minified))
+    setVerboseCode(
+      await beautify(minified, {
+        indent_size: INDENT_SIZE,
+      }),
+    )
   }, [minified, setVerboseCode])
   const handleClickRun = useCallback(async () => {
     try {
@@ -60,15 +67,26 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
       role="tabpanel"
       id={ID_TAB_PANEL_CODE}
       aria-labelledby={ID_TAB_CODE}
-      css={css({ flexGrow: 1 })}
+      css={css({
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 0,
+      })}
     >
-      <TextareaAutosize
-        aria-label={t('verbose code')}
-        css={css({ flexGrow: 1, width: 'calc(100% - 0.5rem)' })}
-        value={verboseCode}
-        onChange={handleChangeCode}
-      />
-      <div css={css({ width: '100%', display: 'flex', gap: '1rem' })}>
+      <Typography variant="h6" component="h2">
+        {t('Verbose code')}
+      </Typography>
+      <div data-testid="verbose-code" css={CSS_FLEX_GROW_1}>
+        <CodeEditor
+          editorName={t('verbose code')}
+          height="100%"
+          tabSize={INDENT_SIZE}
+          code={verboseCode}
+          onChange={handleChangeCode}
+        />
+      </div>
+      <div css={css({ width: '100%', margin: '1rem 0', display: 'flex', gap: '1rem' })}>
         <Button
           variant="outlined"
           disabled={minified.length === 0}
@@ -103,7 +121,7 @@ const CanvasTabPanel: React.FC = (): JSX.Element => {
       role="tabpanel"
       id={ID_TAB_PANEL_CANVAS}
       aria-labelledby={ID_TAB_CANVAS}
-      css={css({ flexGrow: 1 })}
+      css={CSS_FLEX_GROW_1}
     >
       <FlexColumnContainer css={CSS_FLEX_GROW_1}>
         <iframe
@@ -133,24 +151,34 @@ const MinifiedRow: React.FC = (): JSX.Element => {
   const length = [...segments].length
 
   const handleChangeMinified = useCallback(
-    (e: ChangeEvent<globalThis.HTMLTextAreaElement>) => {
-      setMinified(e.target?.value)
+    (value: string) => {
+      setMinified(value)
     },
     [setMinified],
   )
 
   return (
     <div>
-      <TextareaAutosize
-        aria-label={t('minified')}
-        minRows={4}
-        css={css({ width: 'calc(100% - 0.5rem)' })}
-        value={minified}
-        onChange={handleChangeMinified}
-      />
-      <div css={css({ display: 'flex', justifyContent: 'flex-end' })}>
+      <div
+        css={css({
+          display: 'flex',
+          alignItems: 'center',
+        })}
+      >
+        <Typography variant="h6" component="h2" sx={CSS_FLEX_GROW_1}>
+          {t('Minified')}
+        </Typography>
         {`${t('character count: ')}`}
-        <span aria-live="polite">{`${length}`}</span>
+        <span aria-live="polite" data-testid="character-count">{`${length}`}</span>
+      </div>
+      <div data-testid="minified" css={css({ height: '3rem' })}>
+        <CodeEditor
+          editorName={t('minified')}
+          height="3.2rem"
+          tabSize={INDENT_SIZE}
+          code={minified}
+          onChange={handleChangeMinified}
+        />
       </div>
     </div>
   )
@@ -179,7 +207,7 @@ export const Edit: React.FC = (): JSX.Element => {
           display: 'flex',
           flexDirection: 'column',
           gap: '1rem',
-          margin: '1rem 0',
+          margin: '1rem 0 1.5rem',
         }}
       >
         <Tabs value={tabIndex} onChange={handleChangeTab}>
