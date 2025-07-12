@@ -94,7 +94,7 @@ describe('"Edit" page component', () => {
       // assert
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       expect(getReactAceInnerTextArea('minified')).toHaveTextContent(
-        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+        'const msg="Hello, p5.js!"// #つぶやきProcessing',
       )
     })
 

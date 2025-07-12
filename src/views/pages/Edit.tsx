@@ -54,7 +54,7 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
   const handleClickRun = useCallback(async () => {
     try {
       const { code } = await minify(verboseCode)
-      setMinified(`${code}// #つぶやきProcessing`)
+      setMinified(code ? code.replace(/;$/, '// #つぶやきProcessing') : '')
       setTabIndex(1)
     } catch (error) {
       console.error(error.message)
