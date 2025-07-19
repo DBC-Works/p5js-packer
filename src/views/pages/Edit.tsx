@@ -26,6 +26,18 @@ const CSS_FLEX_GROW_1 = css({ flexGrow: 1 })
 const INDENT_SIZE = 2
 
 /**
+ * Count approximate characters
+ * @see {@link https://gist.github.com/miguelmota/e8bbbb5dcc4ef867de5b5a7e47de2b1d}
+ * @param str String to count approximate characters
+ * @returns Approximate character count
+ */
+const countApproximateCharacters = (str: string): number => {
+  // Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+  const m = encodeURIComponent(str).match(/%[89ABab]/g)
+  return str.length + (m?.length ?? 0)
+}
+
+/**
  * Code tab panel component
  * @returns JSX Element
  */
@@ -148,7 +160,8 @@ const MinifiedRow: React.FC = (): JSX.Element => {
   const { t } = useTranslation()
 
   const segments = new Intl.Segmenter().segment(minified)
-  const length = [...segments].length
+  const strictCount = [...segments].length
+  const approximateCount = countApproximateCharacters(minified)
 
   const handleChangeMinified = useCallback(
     (value: string) => {
@@ -169,7 +182,13 @@ const MinifiedRow: React.FC = (): JSX.Element => {
           {t('Minified')}
         </Typography>
         {`${t('character count: ')}`}
-        <span aria-live="polite" data-testid="character-count">{`${length}`}</span>
+        <span aria-live="polite" data-testid="strict-character-count">{`${strictCount}`}</span>
+        {`${t('(strict)')}`} /{' '}
+        <span
+          aria-live="polite"
+          data-testid="approximate-character-count"
+        >{`${approximateCount}`}</span>
+        {`${t('(approximate)')}`}
       </div>
       <div data-testid="minified" css={css({ height: '3rem' })}>
         <CodeEditor
