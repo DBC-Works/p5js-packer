@@ -1,6 +1,6 @@
 [![Build and test](https://github.com/DBC-Works/p5js-packer/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/DBC-Works/p5js-packer/actions/workflows/build-and-test.yml)
 
-# p5js packer
+# p5.js packer
 
 'p5.js packer' is a simple web app that minify and run p5.js code.
 

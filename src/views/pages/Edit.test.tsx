@@ -66,7 +66,8 @@ describe('"Edit" page component', () => {
       await userEvent.type(getReactAceInnerTextArea('minified'), text)
 
       // assert
-      expect(screen.getByText(`${text.length}`)).toBeInTheDocument()
+      expect(screen.getByTestId('strict-character-count')).toHaveTextContent(`${text.length}`)
+      expect(screen.getByTestId('approximate-character-count')).toHaveTextContent(`${text.length}`)
     })
 
     it('should select "Canvas" tab when "Minify & Run" button is clicked', async () => {
@@ -94,7 +95,7 @@ describe('"Edit" page component', () => {
       // assert
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       expect(getReactAceInnerTextArea('minified')).toHaveTextContent(
-        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+        'const msg="Hello, p5.js!"// #つぶやきProcessing',
       )
     })
 
