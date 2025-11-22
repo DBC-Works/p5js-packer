@@ -1,4 +1,4 @@
-import { Button, Snackbar, Tab, Tabs, Typography, css } from '@mui/material'
+import { Button, Link, Snackbar, Tab, Tabs, Typography, css } from '@mui/material'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
 import { type JSX, useCallback, useState } from 'react'
@@ -22,6 +22,10 @@ const ID_TAB_PANEL_CODE = 'code-tab-panel'
 const ID_TAB_PANEL_CANVAS = 'canvas-tab-panel'
 
 const CSS_FLEX_GROW_1 = css({ flexGrow: 1 })
+const CSS_HEADING_ROW = css({
+  display: 'flex',
+  alignItems: 'center',
+})
 
 const INDENT_SIZE = 2
 
@@ -86,9 +90,14 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
         gap: 0,
       })}
     >
-      <Typography variant="h6" component="h2">
-        {t('Verbose code')}
-      </Typography>
+      <div css={CSS_HEADING_ROW}>
+        <Typography variant="h6" component="h2" sx={CSS_FLEX_GROW_1}>
+          {t('Verbose code')}
+        </Typography>
+        <Link href="https://p5js.org/reference/" target="_blank" rel="noopener noreferrer">
+          p5.js reference
+        </Link>
+      </div>
       <div data-testid="verbose-code" css={CSS_FLEX_GROW_1}>
         <CodeEditor
           editorName={t('verbose code')}
@@ -209,12 +218,7 @@ const MinifiedRow: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <div
-        css={css({
-          display: 'flex',
-          alignItems: 'center',
-        })}
-      >
+      <div css={CSS_HEADING_ROW}>
         <Typography variant="h6" component="h2" sx={CSS_FLEX_GROW_1}>
           {t('Minified')}
         </Typography>
