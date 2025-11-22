@@ -30,6 +30,17 @@ describe('"Edit" page component', () => {
   })
 
   describe('"Code" tab', () => {
+    it('should have the link to the p5.js reference web page', () => {
+      // arrange & act
+      setup()
+
+      // assert
+      expect(screen.getByRole('link', { name: 'p5.js reference' })).toHaveAttribute(
+        'href',
+        'https://p5js.org/reference/',
+      )
+    })
+
     it('should enable "Minify & Run" button when the verbose code is entered', async () => {
       // arrange
       setup()
