@@ -116,6 +116,31 @@ describe('"Edit" page component', () => {
         'const msg = "Hello, p5.js!"; // #つぶやきProcessing',
       )
     })
+
+    it('should disable the "Copy to clipboard" button if minified code is empty', async () => {
+      // arrange & act
+      setup()
+
+      // assert
+      expect(screen.getByRole('button', { name: 'Copy to clipboard' })).toBeDisabled()
+    })
+
+    it('should copy minified code to clipboard when "Copy to clipboard" button is clicked', async () => {
+      // arrange
+      setup()
+      await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
+      await userEvent.type(
+        getReactAceInnerTextArea('minified'),
+        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+      )
+
+      // act
+      await userEvent.click(screen.getByRole('button', { name: 'Copy to clipboard' }))
+
+      // assert
+      const actual = await navigator.clipboard.readText()
+      expect(actual).toEqual('const msg="Hello, p5.js!";// #つぶやきProcessing')
+    })
   })
 
   describe('"Canvas" tab', () => {

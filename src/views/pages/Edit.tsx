@@ -1,7 +1,7 @@
-import { Button, Tab, Tabs, Typography, css } from '@mui/material'
+import { Button, Snackbar, Tab, Tabs, Typography, css } from '@mui/material'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
-import { type JSX, useCallback } from 'react'
+import { type JSX, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { minify } from 'terser'
 
@@ -151,6 +151,43 @@ const CanvasTabPanel: React.FC = (): JSX.Element => {
 }
 
 /**
+ * Copy to clipboard button component
+ * @returns JSX Element
+ */
+const CopyToClipboardButton: React.FC = () => {
+  const minified = useAtomValue(getMinifiedAtom)
+  const { t } = useTranslation()
+
+  const [copyToClipboard, setCopyToClipboard] = useState<boolean>(false)
+  const handleClickCopyToClipboard = useCallback(async () => {
+    await navigator.clipboard.writeText(minified)
+    setCopyToClipboard(true)
+  }, [minified])
+  const handleCloseSnackbar = useCallback(() => {
+    setCopyToClipboard(false)
+  }, [])
+
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        disabled={minified.length === 0}
+        onClick={handleClickCopyToClipboard}
+      >
+        {t('Copy to clipboard')}
+      </Button>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        message={t('Copied!')}
+        autoHideDuration={500}
+        open={copyToClipboard}
+        onClose={handleCloseSnackbar}
+      />
+    </div>
+  )
+}
+
+/**
  * Minified row component
  * @returns JSX Element
  */
@@ -198,6 +235,15 @@ const MinifiedRow: React.FC = (): JSX.Element => {
           code={minified}
           onChange={handleChangeMinified}
         />
+      </div>
+      <div
+        css={css({
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '1rem',
+        })}
+      >
+        <CopyToClipboardButton />
       </div>
     </div>
   )
