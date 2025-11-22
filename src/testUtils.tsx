@@ -31,7 +31,7 @@ export const setupComponentUnderTest = (component: React.ReactNode): SetUpResult
   renderResult: render(<React.StrictMode>{component}</React.StrictMode>),
 })
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: any is needed
 type AtomValuesType = Iterable<readonly [WritableAtom<unknown, [any], unknown>, unknown]>
 type JotaiPropsType = {
   atomValues: AtomValuesType

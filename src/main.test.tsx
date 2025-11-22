@@ -1,9 +1,11 @@
 import { screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
-
-import { setupComponentWithStateProviderUnderTest } from './testUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import { P5JsPacker } from './main'
+import { setupComponentWithStateProviderUnderTest } from './testUtils'
+
+vi.mock('views/atoms/P5JsSandBox')
+vi.mock('views/molecules/CodeEditor')
 
 describe('App', () => {
   it('should display app title', () => {

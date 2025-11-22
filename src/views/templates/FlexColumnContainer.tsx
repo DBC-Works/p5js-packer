@@ -1,4 +1,4 @@
-import { type SerializedStyles, css as emotionCss } from '@emotion/react'
+import { css as emotionCss, type SerializedStyles } from '@emotion/react'
 import type { JSX } from 'react'
 
 const CSS_FLEX_COLUMN_CONTAINER = emotionCss({

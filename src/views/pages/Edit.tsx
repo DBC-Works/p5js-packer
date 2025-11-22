@@ -1,4 +1,4 @@
-import { Button, Link, Snackbar, Tab, Tabs, Typography, css } from '@mui/material'
+import { Button, css, Link, Snackbar, Tab, Tabs, Typography } from '@mui/material'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
 import { type JSX, useCallback, useState } from 'react'
@@ -12,6 +12,7 @@ import {
   setVerboseCodeAtom,
   tabIndexAtom,
 } from '../../states/atoms'
+import { P5JsSandBox } from '../atoms/P5JsSandBox'
 import { CodeEditor } from '../molecules/CodeEditor'
 import { App } from '../templates/App'
 import { FlexColumnContainer } from '../templates/FlexColumnContainer'
@@ -135,8 +136,6 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
  * @returns JSX Element
  */
 const CanvasTabPanel: React.FC = (): JSX.Element => {
-  const minified = useAtomValue(getMinifiedAtom)
-
   return (
     <FlexColumnContainer
       role="tabpanel"
@@ -145,15 +144,7 @@ const CanvasTabPanel: React.FC = (): JSX.Element => {
       css={CSS_FLEX_GROW_1}
     >
       <FlexColumnContainer css={CSS_FLEX_GROW_1}>
-        <iframe
-          sandbox="allow-scripts"
-          title="canvas"
-          css={css({ flexGrow: 1, width: 'calc(100% - 0.5rem)', border: 'none' })}
-          srcDoc={`
-<script src="https://cdn.jsdelivr.net/npm/p5@2.0.3/lib/p5.min.js"></script>
-<script>window.devicePixelRatio=1;${minified}</script>
-`}
-        />
+        <P5JsSandBox />
       </FlexColumnContainer>
     </FlexColumnContainer>
   )

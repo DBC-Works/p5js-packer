@@ -7,7 +7,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
 import { AppBar, Link, Toolbar, Typography } from '@mui/material'
-// @ts-ignore
+// @ts-expect-error
 import GitHubIcon from '../../assets/icons/github-mark-white.svg?react'
 import { GlobalStyles } from '../GlobalStyles'
 
