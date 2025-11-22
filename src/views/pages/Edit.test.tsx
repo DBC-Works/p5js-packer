@@ -6,6 +6,7 @@ import { minifiedAtom, verboseCodeAtom } from '../../states/atoms'
 import { setupComponentWithStateProviderUnderTest } from '../../testUtils'
 import { Edit } from './Edit'
 
+vi.mock('../atoms/P5JsSandBox')
 vi.mock('../molecules/CodeEditor')
 
 describe('"Edit" page component', () => {
