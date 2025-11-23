@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.0] - 2025-11-23
+
+### Added
+
+- "Copy to clipboard" button (#23)
+- External web site links (#24)
+
 ## [v0.1.0] - 2025-06-22
 
 First release.
