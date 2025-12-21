@@ -62,3 +62,26 @@ export const setMinifiedAtom = atom(null, (_, set, minified: string) => {
  * Tab index atom
  */
 export const tabIndexAtom = atom(0)
+
+type Settings = {
+  hashTag: string
+}
+
+/**
+ * Settings atom
+ */
+export const settingsAtom = atomWithStorage<Settings>('settings', {
+  hashTag: '#つぶやきProcessing',
+})
+
+/**
+ * Get hash tag setting read-only atom
+ */
+export const getHashTagSettingAtom = atom((get) => get(settingsAtom).hashTag)
+
+/**
+ * Set hash tag setting write-only atom
+ */
+export const setHashTagSettingAtom = atom(null, (get, set, hashTag: string) => {
+  set(settingsAtom, { ...get(settingsAtom), hashTag })
+})
