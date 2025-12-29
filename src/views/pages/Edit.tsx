@@ -1,4 +1,10 @@
-import { Button, css, Link, Snackbar, Tab, Tabs, Typography } from '@mui/material'
+import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+import Snackbar from '@mui/material/Snackbar'
+import { css } from '@mui/material/styles'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import Typography from '@mui/material/Typography'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import beautify from 'js-beautify'
 import { type JSX, useCallback, useState } from 'react'
@@ -6,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { minify } from 'terser'
 
 import {
+  getHashTagSettingAtom,
   getMinifiedAtom,
   getVerboseCodeAtom,
   setMinifiedAtom,
@@ -47,6 +54,7 @@ const countApproximateCharacters = (str: string): number => {
  * @returns JSX Element
  */
 const CodeTabPanel: React.FC = (): JSX.Element => {
+  const hashTag = useAtomValue(getHashTagSettingAtom)
   const verboseCode = useAtomValue(getVerboseCodeAtom)
   const minified = useAtomValue(getMinifiedAtom)
   const setVerboseCode = useSetAtom(setVerboseCodeAtom)
@@ -71,13 +79,13 @@ const CodeTabPanel: React.FC = (): JSX.Element => {
   const handleClickRun = useCallback(async () => {
     try {
       const { code } = await minify(verboseCode)
-      setMinified(code ? code.replace(/;$/, '// #つぶやきProcessing') : '')
+      setMinified(code ? code.replace(/;$/, `// ${hashTag}`) : '')
       setTabIndex(1)
     } catch (error) {
       console.error(error.message)
       setMinified(error.message)
     }
-  }, [verboseCode, setMinified, setTabIndex])
+  }, [hashTag, verboseCode, setMinified, setTabIndex])
 
   return (
     <FlexColumnContainer

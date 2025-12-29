@@ -2,7 +2,7 @@ import { getByRole, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { minifiedAtom, verboseCodeAtom } from '../../states/atoms'
+import { minifiedAtom, settingsAtom, verboseCodeAtom } from '../../states/atoms'
 import { setupComponentWithStateProviderUnderTest } from '../../testUtils'
 import { Edit } from './Edit'
 
@@ -14,6 +14,7 @@ describe('"Edit" page component', () => {
     setupComponentWithStateProviderUnderTest(<Edit />, [
       [verboseCodeAtom, ''],
       [minifiedAtom, ''],
+      [settingsAtom, { hashTag: '#つぶやきProcessing #CreativeCoding' }],
     ])
   }
 
@@ -107,7 +108,7 @@ describe('"Edit" page component', () => {
       // assert
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       expect(getReactAceInnerTextArea('minified')).toHaveTextContent(
-        'const msg="Hello, p5.js!"// #つぶやきProcessing',
+        'const msg="Hello, p5.js!"// #つぶやきProcessing #CreativeCoding',
       )
     })
 
@@ -117,7 +118,7 @@ describe('"Edit" page component', () => {
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       await userEvent.type(
         getReactAceInnerTextArea('minified'),
-        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+        'const msg="Hello, p5.js!";// #つぶやきProcessing #CreativeCoding',
       )
 
       // act
@@ -125,7 +126,7 @@ describe('"Edit" page component', () => {
 
       // assert
       expect(getReactAceInnerTextArea('verbose-code')).toHaveTextContent(
-        'const msg = "Hello, p5.js!"; // #つぶやきProcessing',
+        'const msg = "Hello, p5.js!"; // #つぶやきProcessing #CreativeCoding',
       )
     })
 
@@ -143,7 +144,7 @@ describe('"Edit" page component', () => {
       await userEvent.click(screen.getByRole('tab', { name: 'Code' }))
       await userEvent.type(
         getReactAceInnerTextArea('minified'),
-        'const msg="Hello, p5.js!";// #つぶやきProcessing',
+        'const msg="Hello, p5.js!";// #つぶやきProcessing #CreativeCoding',
       )
 
       // act
@@ -151,7 +152,7 @@ describe('"Edit" page component', () => {
 
       // assert
       const actual = await navigator.clipboard.readText()
-      expect(actual).toEqual('const msg="Hello, p5.js!";// #つぶやきProcessing')
+      expect(actual).toEqual('const msg="Hello, p5.js!";// #つぶやきProcessing #CreativeCoding')
     })
   })
 

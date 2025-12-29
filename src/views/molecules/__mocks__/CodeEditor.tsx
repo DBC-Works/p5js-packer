@@ -1,4 +1,4 @@
-import { TextareaAutosize } from '@mui/material'
+import TextareaAutosize from '@mui/material/TextareaAutosize'
 import { type ChangeEvent, type JSX, useCallback } from 'react'
 
 type Props = {
