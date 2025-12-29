@@ -37,7 +37,7 @@ export const getVerboseCodeAtom = atom((get) => get(verboseCodeAtom))
 /**
  * Set verbose code write-only atom
  */
-export const setVerboseCodeAtom = atom(null, (_, set, code: string) => {
+export const setVerboseCodeAtom = atom(null, (_, set, code: string): void => {
   set(verboseCodeAtom, code)
 })
 
@@ -54,7 +54,7 @@ export const getMinifiedAtom = atom((get) => get(minifiedAtom))
 /**
  * Set minified write-only atom
  */
-export const setMinifiedAtom = atom(null, (_, set, minified: string) => {
+export const setMinifiedAtom = atom(null, (_, set, minified: string): void => {
   set(minifiedAtom, minified)
 })
 
@@ -65,6 +65,7 @@ export const tabIndexAtom = atom(0)
 
 type Settings = {
   hashTag: string
+  p5jsVersion: string
 }
 
 /**
@@ -72,6 +73,7 @@ type Settings = {
  */
 export const settingsAtom = atomWithStorage<Settings>('settings', {
   hashTag: '#つぶやきProcessing',
+  p5jsVersion: '2.1.2',
 })
 
 /**
@@ -82,6 +84,18 @@ export const getHashTagSettingAtom = atom((get) => get(settingsAtom).hashTag)
 /**
  * Set hash tag setting write-only atom
  */
-export const setHashTagSettingAtom = atom(null, (get, set, hashTag: string) => {
+export const setHashTagSettingAtom = atom(null, (get, set, hashTag: string): void => {
   set(settingsAtom, { ...get(settingsAtom), hashTag })
+})
+
+/**
+ * Get p5.js version setting read-only atom
+ */
+export const getP5JsVersionSettingAtom = atom((get) => get(settingsAtom).p5jsVersion ?? '2.1.2')
+
+/**
+ * Set p5.js version setting write-only atom
+ */
+export const setP5JsVersionSettingAtom = atom(null, (get, set, p5jsVersion: string): void => {
+  set(settingsAtom, { ...get(settingsAtom), p5jsVersion })
 })
