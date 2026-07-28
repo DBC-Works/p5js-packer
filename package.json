@@ -42,7 +42,7 @@
     "es-toolkit": "^1.43.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "jotai": "^2.12.5",
-    "js-beautify": "^1.15.4",
+    "js-beautify": "^2.0.3",
     "react": "^19.1.0",
     "react-ace": "^14.0.1",
     "react-dom": "^19.1.0",
